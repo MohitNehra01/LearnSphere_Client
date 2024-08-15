@@ -135,7 +135,6 @@ const CreateCourse = () => {
   useEffect(() => {
     (async () => {
       const res = await dispatch(getAllowCategory());
-      console.log(res);
       if (res.payload.success) {
         setCategory(res.payload.categories);
       }
@@ -148,7 +147,7 @@ const CreateCourse = () => {
         {/* card for creating the new card */}
         <form
           onSubmit={handleFormSubmit}
-          className="flex flex-col justify-center gap-5 rounded-lg p-4 text-black w-[700px] h-[450px] shadow-[0_0_10px_black] relative"
+          className="flex flex-col justify-center gap-5 rounded-lg p-4 text-black w-[700px] min-h-[450px] shadow-[0_0_10px_black] relative"
         >
           <Link
             to={"/admin/dashboard"}
@@ -162,7 +161,7 @@ const CreateCourse = () => {
             <span>Course</span>
           </h1>
 
-          <main className="grid grid-cols-2 gap-x-10">
+          <main className=" grid grid-cols-1 md:grid-cols-2 gap-x-10">
             {/* for course basic details */}
             <div className="space-y-6">
               <div

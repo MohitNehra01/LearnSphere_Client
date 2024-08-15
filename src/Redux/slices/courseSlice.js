@@ -23,7 +23,8 @@ export const getAllCourses = createAsyncThunk("/course/get", async () => {
 
         return response.data.courses;
     } catch (error) {
-        toast.error(error?.response?.data?.message);
+        toast.error(error?.response?.data?.msg
+        );
     }
 });
 
@@ -128,9 +129,35 @@ export const deleteCourse = createAsyncThunk("/course/delete", async (id) => {
 
         return response.data;
     } catch (error) {
-        toast.error(error?.response?.data?.message);
+        toast.error(error?.response?.data?.msg);
     }
 });
+
+export const addClassNotice = createAsyncThunk('/course/addClassNotice', async (data) => {
+    try {
+        const res = axiosInstance.post(`courses/notice/${data.id}`, data);
+
+        toast.promise(res, {
+            loading: "adding class Notice...",
+            success: "class notice add successfully",
+            error: (err) => {
+                // Check if there's a response with an error message
+                if (err.response && err.response.data && err.response.data.msg) {
+                    return `${err.response.data.msg}`;
+                } else {
+                    // Generic error message
+                    return `Failed to add class Notice`;
+                }
+            },
+        });
+
+        const response = await res;
+
+        return response.data;
+    } catch (error) {
+        console.log(error?.response?.data?.msg);
+    }
+})
 
 export const createNewCourse = createAsyncThunk(
     "/get/courses",
@@ -185,6 +212,71 @@ export const updateCourse = createAsyncThunk("/course/update", async (data) => {
 });
 
 
+export const addCourseLecture = createAsyncThunk(
+    "/course/lecture/add",
+    async (data) => {
+        const formData = new FormData();
+        formData.append("lecture", data.lecture);
+        formData.append("title", data.title);
+        formData.append("description", data.description);
+
+        try {
+            const res = axiosInstance.post(`/courses/mycourse/${data.id}`, formData);
+
+            toast.promise(res, {
+                loading: "Adding the lecture...",
+                success: "Lecture added successfully",
+                error: (err) => {
+                    // Check if there's a response with an error message
+                    if (err.response && err.response.data && err.response.data.msg) {
+                        return `${err.response.data.msg}`;
+                    } else {
+                        // Generic error message
+                        return `Failed to add lecture`;
+                    }
+                },
+            });
+
+            const response = await res;
+
+            return response.data;
+        } catch (error) {
+            console.log(error?.response?.data?.message);
+        }
+    }
+);
+
+export const deleteCourseLecture = createAsyncThunk(
+    "/course/lecture/delete",
+    async (data) => {
+      console.log(data);
+      try {
+        const res = axiosInstance.delete(
+          `/courses/?courseId=${data.courseId}&lectureId=${data.lectureId}`
+        );
+  
+        toast.promise(res, {
+          loading: "Deleting the lecture...",
+          success: "Lecture deleted successfully",
+          error: (err) => {
+            // Check if there's a response with an error message
+            if (err.response && err.response.data && err.response.data.msg) {
+                return `${err.response.data.msg}`;
+            } else {
+                // Generic error message
+                return `Failed to delete lecture`;
+            }
+        },
+        });
+  
+        const response = await res;
+        return response.data;
+      } catch (error) {
+        console(error?.response?.data?.msg);
+      }
+    }
+  );
+
 const courseSlice = createSlice({
     name: "course",
     initialState,
@@ -232,6 +324,13 @@ const courseSlice = createSlice({
                 }
             })
 
+            .addCase(addCourseLecture.fulfilled, (state, action) => {
+                if (action?.payload?.data?.success) {
+                    state.courseLecture = action?.payload?.course?.lectures;
+                }
+
+            })
+
             .addCase(logout.fulfilled, (state, action) => {
 
                 if (action?.payload) {
@@ -243,7 +342,7 @@ const courseSlice = createSlice({
 
 
 
-    },
+},
 });
 
 export default courseSlice.reducer;

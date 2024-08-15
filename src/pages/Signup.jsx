@@ -2,13 +2,13 @@ import { useState } from "react";
 import { toast } from "react-hot-toast";
 import { BsPersonCircle } from "react-icons/bs";
 import { useDispatch } from "react-redux";
-import { Link, useNavigate } from "react-router-dom";
+import { Link } from "react-router-dom";
 
+import Logo from "../assets/Learn_Sphere_logo/logo-no-background.png";
 import { createAccount } from "../Redux/slices/authSlice";
 
 function Signup() {
   const dispatch = useDispatch();
-  const navigate = useNavigate();
 
   const [previewImage, setImagePreview] = useState("");
 
@@ -88,8 +88,8 @@ function Signup() {
       return;
     }
 
-    if(signupData.password !== signupData.confirmPassword){
-      return toast.error('Password and Confirm Password must be same')
+    if (signupData.password !== signupData.confirmPassword) {
+      return toast.error("Password and Confirm Password must be same");
     }
 
     // creating the form data from the existing data
@@ -104,7 +104,10 @@ function Signup() {
     const res = await dispatch(createAccount(formData));
 
     // redirect to login page if true
-    if (res?.payload?.success) navigate("/account-verfify");
+    if (res?.payload?.success)
+      toast("Please , verify your account mail is sent to your email", {
+        icon: "ℹ️",
+      });
 
     // clearing the signup inputs
     setSignupData({
@@ -120,8 +123,10 @@ function Signup() {
     <section className="flex  bg-gradient-to-r from-purple-200 to-purple-600 w-[100vw] min-h-[100vh] m-0 p-0">
       <div className="hidden w-[60%] bg-gradient-to-r from-purple-200 to-purple-600 justify-center items-center md:flex">
         <div className="text-center">
-          <img src={""} alt="Logo" className="w-32 mx-auto mb-4" />
-          <h3 className="text-2xl font-bold mb-2">Registration Page</h3>
+          <img src={Logo} alt="Logo" className="w-32 mx-auto mb-4" />
+          <h3 className="text-2xl font-bold mb-2 text-white">
+            Registration Page
+          </h3>
         </div>
       </div>
 

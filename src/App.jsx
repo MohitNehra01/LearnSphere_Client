@@ -8,6 +8,7 @@ import RequireAuth from "./components/auth/RequireAuth";
 import About from "./pages/About";
 import CancelAndRefundPolicy from "./pages/CancelAndRefundPolicy";
 import Contact from "./pages/Contact";
+import AddLecture from "./pages/course/AddLecture";
 import Course from "./pages/course/Course";
 import CourseCategory from "./pages/course/CourseCategory";
 import CourseDescription from "./pages/course/CourseDescription";
@@ -92,7 +93,7 @@ function App() {
         <Route path="/denied" element={<Denied />} />
         <Route path="/forgetpassword" element={<ForgetPassword />} />
         <Route path="/user/profile" element={<Profile />} />
-        
+
         <Route element={<NotRequireAuth />}>
           <Route path="/login" element={<Login />} />
           <Route path="/signup" element={<Signup />} />
@@ -103,12 +104,12 @@ function App() {
         <Route element={<RequireAuth allowedRoles={["ADMIN", "INST"]} />}>
           <Route path="/admin/dashboard" element={<AdminDashboard />} />
           <Route path="/course/create" element={<CreateCourse />} />
+          <Route path="/course/addLecture" element={<AddLecture />} />
         </Route>
 
         <Route
           element={<RequireAuth allowedRoles={["ADMIN", "INST", "USER"]} />}
         >
-        
           <Route path="/course/checkout" element={<Checkout />} />
           <Route path="/course/checkout/success" element={<PaymentSuccess />} />
           <Route path="/course/checkout/fail" element={<PaymentFailure />} />
